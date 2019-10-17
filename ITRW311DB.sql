@@ -1,4 +1,7 @@
-Drop Table Transactions;
+
+/* awe*/ 
+
+    Drop Table Transactions;
 Drop Table DVD;
 Drop Table Customers;
 Drop Table Shop;
@@ -58,19 +61,18 @@ CREATE TABLE DVD (
         Date_Of_Release DATE         NOT NULL,
         Length_Of_DVD   NUMBER(4)         NOT NULL,
         DVD_Cost        Number(5)         NOT NULL,
-        Shop_ID         NUMBER(7)         NOT NULL,
+    
         
         CONSTRAINT fk_Genre_ID1 FOREIGN KEY (Genre_ID)
                 REFERENCES Genre(Genre_ID),
         CONSTRAINT fk_Age_Res_ID1 FOREIGN KEY (Age_Res_ID)
-                REFERENCES Age_Restriction(Age_Res_ID),
-        CONSTRAINT fk_Shop_ID1 FOREIGN KEY (Shop_ID)
-                REFERENCES Shop(Shop_ID)
+                REFERENCES Age_Restriction(Age_Res_ID)
                     ); 
 CREATE TABLE Transactions (
         Transaction_ID          NUMBER(7)       PRIMARY KEY      NOT NULL,
         Customer_ID             NUMBER(7)         NOT NULL,
         DVD_ID                  NUMBER(7)         NOT NULL,
+        Shop_ID         NUMBER(7)         NOT NULL,
         Rental_Date             DATE            DEFAULT SYSDATE,
         Return_Date             DATE            DEFAULT SYSDATE,
         Total                   NUMBER(10)         NOT NULL,
@@ -78,11 +80,22 @@ CREATE TABLE Transactions (
         CONSTRAINT fk_Customer_ID1 FOREIGN KEY (Customer_ID)
                 REFERENCES Customers(Customers_ID),
         CONSTRAINT fk_DVD_ID1 FOREIGN KEY (DVD_ID)
-                REFERENCES DVD(DVD_ID)
+                REFERENCES DVD(DVD_ID),
+        CONSTRAINT fk_Shop_ID1 FOREIGN KEY (Shop_ID)
+                REFERENCES Shop(Shop_ID)
                     ); 
 
 /* Sequences
 */    
+Drop SEQuENCE GenreGenerate;
+Drop SEQuENCE Age_Res_Generate;
+Drop SEQuENCE DVD_Generate;
+Drop SEQuENCE Shop_Generate;
+Drop SEQuENCE Transaction_Generate;
+Drop SEQuENCE Customers_Generate;
+Drop SEQuENCE Address_Generate;
+Drop SEQuENCE CustomerAddress_Generate;
+
 CREATE SEQUENCE GenreGenerate
 INCREMENT BY 1
 START WITH 1
@@ -140,6 +153,8 @@ NOCACHE
 NOCYCLE;
 
 /* Insert GENRE
+
+
 */    
 
 INSERT INTO Genre
@@ -284,7 +299,7 @@ INSERT INTO Shop
         (Shop_ID, Shop_Description,Address_ID)
         VALUES
         (SHOP_GENERATE.nextval, 'MovieMeg1',1);
-        
+       
 INSERT INTO Shop
         (Shop_ID, Shop_Description,Address_ID)
         VALUES
@@ -346,7 +361,7 @@ INSERT INTO Customers
         (Customers_ID, F_Name,L_Name,Address_ID,Cell_Number,Date_Joined)
         VALUES
         (CUSTOMERS_GENERATE.nextval, 'Piet','van Wyk',CustomerAddress_Generate.nextval,0812794802,TO_DATE('30/05/2015', 'DD/MM/YYYY'));
-        
+    
 INSERT INTO Customers
         (Customers_ID, F_Name,L_Name,Address_ID,Cell_Number,Date_Joined)
         VALUES
@@ -376,157 +391,159 @@ INSERT INTO Customers
 /* Insert DVD
 */
 INSERT INTO DVD
-        (DVD_ID, Title,Genre_ID,Age_Res_ID,Date_Of_Release,Length_Of_DVD,DVD_Cost,Shop_ID)
+        (DVD_ID, Title,Genre_ID,Age_Res_ID,Date_Of_Release,Length_Of_DVD,DVD_Cost)
         VALUES
-        (DVD_GENERATE.nextval, 'Avengers',2,2,TO_DATE('17/02/2015', 'DD/MM/YYYY'),123,55,1);   
+        (DVD_GENERATE.nextval, 'Avengers',2,2,TO_DATE('17/02/2015', 'DD/MM/YYYY'),123,55);   
         
  INSERT INTO DVD
-        (DVD_ID, Title,Genre_ID,Age_Res_ID,Date_Of_Release,Length_Of_DVD,DVD_Cost,Shop_ID)
+        (DVD_ID, Title,Genre_ID,Age_Res_ID,Date_Of_Release,Length_Of_DVD,DVD_Cost)
         VALUES
-        (DVD_GENERATE.nextval, 'Thor: Ragnarok',3,2,TO_DATE('18/02/2015', 'DD/MM/YYYY'),140,60,1); 
+        (DVD_GENERATE.nextval, 'Thor: Ragnarok',3,2,TO_DATE('18/02/2015', 'DD/MM/YYYY'),140,60); 
         
  INSERT INTO DVD
-        (DVD_ID, Title,Genre_ID,Age_Res_ID,Date_Of_Release,Length_Of_DVD,DVD_Cost,Shop_ID)
+        (DVD_ID, Title,Genre_ID,Age_Res_ID,Date_Of_Release,Length_Of_DVD,DVD_Cost)
         VALUES
-        (DVD_GENERATE.nextval, 'The Godfather',1,1,TO_DATE('24/03/1942', 'DD/MM/YYYY'),135,80,1); 
+        (DVD_GENERATE.nextval, 'The Godfather',1,1,TO_DATE('24/03/1942', 'DD/MM/YYYY'),135,80); 
         
  INSERT INTO DVD
-        (DVD_ID, Title,Genre_ID,Age_Res_ID,Date_Of_Release,Length_Of_DVD,DVD_Cost,Shop_ID)
+        (DVD_ID, Title,Genre_ID,Age_Res_ID,Date_Of_Release,Length_Of_DVD,DVD_Cost)
         VALUES
-        (DVD_GENERATE.nextval, 'The Green Mile',1,1,TO_DATE('25/06/1995', 'DD/MM/YYYY'),138,60,1); 
+        (DVD_GENERATE.nextval, 'The Green Mile',1,1,TO_DATE('25/06/1995', 'DD/MM/YYYY'),138,60); 
         
  INSERT INTO DVD
-        (DVD_ID, Title,Genre_ID,Age_Res_ID,Date_Of_Release,Length_Of_DVD,DVD_Cost,Shop_ID)
+        (DVD_ID, Title,Genre_ID,Age_Res_ID,Date_Of_Release,Length_Of_DVD,DVD_Cost)
         VALUES
-        (DVD_GENERATE.nextval, 'Star Wars: Episode 1',4,2,TO_DATE('18/03/1973', 'DD/MM/YYYY'),125,45,1); 
+        (DVD_GENERATE.nextval, 'Star Wars: Episode 1',4,2,TO_DATE('18/03/1973', 'DD/MM/YYYY'),125,45); 
         
  INSERT INTO DVD
-        (DVD_ID, Title,Genre_ID,Age_Res_ID,Date_Of_Release,Length_Of_DVD,DVD_Cost,Shop_ID)
+        (DVD_ID, Title,Genre_ID,Age_Res_ID,Date_Of_Release,Length_Of_DVD,DVD_Cost)
         VALUES
-        (DVD_GENERATE.nextval, 'Lion King',5,5,TO_DATE('26/04/1997', 'DD/MM/YYYY'),105,50,2); 
+        (DVD_GENERATE.nextval, 'Lion King',5,5,TO_DATE('26/04/1997', 'DD/MM/YYYY'),105,50); 
         
  INSERT INTO DVD
-        (DVD_ID, Title,Genre_ID,Age_Res_ID,Date_Of_Release,Length_Of_DVD,DVD_Cost,Shop_ID)
+        (DVD_ID, Title,Genre_ID,Age_Res_ID,Date_Of_Release,Length_Of_DVD,DVD_Cost)
         VALUES
-        (DVD_GENERATE.nextval, 'Antz',5,2,TO_DATE('15/12/2004', 'DD/MM/YYYY'),97,30,2); 
+        (DVD_GENERATE.nextval, 'Antz',5,2,TO_DATE('15/12/2004', 'DD/MM/YYYY'),97,30); 
         
  INSERT INTO DVD
-        (DVD_ID, Title,Genre_ID,Age_Res_ID,Date_Of_Release,Length_Of_DVD,DVD_Cost,Shop_ID)
+        (DVD_ID, Title,Genre_ID,Age_Res_ID,Date_Of_Release,Length_Of_DVD,DVD_Cost)
         VALUES
-        (DVD_GENERATE.nextval, 'Note Book',6,4,TO_DATE('12/02/2015', 'DD/MM/YYYY'),115,50,2); 
+        (DVD_GENERATE.nextval, 'Note Book',6,4,TO_DATE('12/02/2015', 'DD/MM/YYYY'),115,50); 
         
  INSERT INTO DVD
-        (DVD_ID, Title,Genre_ID,Age_Res_ID,Date_Of_Release,Length_Of_DVD,DVD_Cost,Shop_ID)
+        (DVD_ID, Title,Genre_ID,Age_Res_ID,Date_Of_Release,Length_Of_DVD,DVD_Cost)
         VALUES
-        (DVD_GENERATE.nextval, 'Journey to the centre of the earth',2,3,TO_DATE('14/03/2010', 'DD/MM/YYYY'),103,55,2); 
+        (DVD_GENERATE.nextval, 'Journey to centre',2,3,TO_DATE('14/03/2010', 'DD/MM/YYYY'),103,55); 
         
  INSERT INTO DVD
-        (DVD_ID, Title,Genre_ID,Age_Res_ID,Date_Of_Release,Length_Of_DVD,DVD_Cost,Shop_ID)
+        (DVD_ID, Title,Genre_ID,Age_Res_ID,Date_Of_Release,Length_Of_DVD,DVD_Cost)
         VALUES
-        (DVD_GENERATE.nextval, 'Marley and Me',6,2,TO_DATE('15/02/2009', 'DD/MM/YYYY'),115,55,2); 
+        (DVD_GENERATE.nextval, 'Marley and Me',6,2,TO_DATE('15/02/2009', 'DD/MM/YYYY'),115,55); 
         
  INSERT INTO DVD
-        (DVD_ID, Title,Genre_ID,Age_Res_ID,Date_Of_Release,Length_Of_DVD,DVD_Cost,Shop_ID)
+        (DVD_ID, Title,Genre_ID,Age_Res_ID,Date_Of_Release,Length_Of_DVD,DVD_Cost)
         VALUES
-        (DVD_GENERATE.nextval, 'EroticaXXX',6,1,TO_DATE('14/02/2010', 'DD/MM/YYYY'),85,90,3); 
+        (DVD_GENERATE.nextval, 'EroticaXXX',6,1,TO_DATE('14/02/2010', 'DD/MM/YYYY'),85,90); 
         
  INSERT INTO DVD
-        (DVD_ID, Title,Genre_ID,Age_Res_ID,Date_Of_Release,Length_Of_DVD,DVD_Cost,Shop_ID)
+        (DVD_ID, Title,Genre_ID,Age_Res_ID,Date_Of_Release,Length_Of_DVD,DVD_Cost)
         VALUES
-        (DVD_GENERATE.nextval, 'Stroomop',2,4,TO_DATE('15/03/2019', 'DD/MM/YYYY'),117,55,3); 
+        (DVD_GENERATE.nextval, 'Stroomop',2,4,TO_DATE('15/03/2019', 'DD/MM/YYYY'),117,55); 
         
  INSERT INTO DVD
-        (DVD_ID, Title,Genre_ID,Age_Res_ID,Date_Of_Release,Length_Of_DVD,DVD_Cost,Shop_ID)
+        (DVD_ID, Title,Genre_ID,Age_Res_ID,Date_Of_Release,Length_Of_DVD,DVD_Cost)
         VALUES
-        (DVD_GENERATE.nextval, 'Avengers: Endgame',2,1,TO_DATE('17/12/2019', 'DD/MM/YYYY'),195,70,3); 
+        (DVD_GENERATE.nextval, 'Avengers: Endgame',2,1,TO_DATE('17/12/2019', 'DD/MM/YYYY'),195,70); 
         
  INSERT INTO DVD
-        (DVD_ID, Title,Genre_ID,Age_Res_ID,Date_Of_Release,Length_Of_DVD,DVD_Cost,Shop_ID)
+        (DVD_ID, Title,Genre_ID,Age_Res_ID,Date_Of_Release,Length_Of_DVD,DVD_Cost)
         VALUES
-        (DVD_GENERATE.nextval, 'Irom Man',2,2,TO_DATE('17/12/2013', 'DD/MM/YYYY'),124,40,3); 
+        (DVD_GENERATE.nextval, 'Irom Man',2,2,TO_DATE('17/12/2013', 'DD/MM/YYYY'),124,40); 
         
  INSERT INTO DVD
-        (DVD_ID, Title,Genre_ID,Age_Res_ID,Date_Of_Release,Length_Of_DVD,DVD_Cost,Shop_ID)
+        (DVD_ID, Title,Genre_ID,Age_Res_ID,Date_Of_Release,Length_Of_DVD,DVD_Cost)
         VALUES
-        (DVD_GENERATE.nextval, 'Spirit',2,5,TO_DATE('17/12/2004', 'DD/MM/YYYY'),116,50,3); 
+        (DVD_GENERATE.nextval, 'Spirit',2,5,TO_DATE('17/12/2004', 'DD/MM/YYYY'),116,50); 
         /*15*/
         
 /*Insert Transactions
 */
 INSERT INTO Transactions
-        (Transaction_ID, Customer_ID, DVD_ID, Rental_Date , Return_Date, Total)
+        (Transaction_ID, Customer_ID, DVD_ID,Shop_ID, Rental_Date , Return_Date, Total)
         VALUES
-        (Transaction_Generate.nextval,1,2,TO_DATE('17/12/2015', 'DD/MM/YYYY'),TO_DATE('19/12/2015', 'DD/MM/YYYY'),60);  
+        (Transaction_Generate.nextval,1,2,1,TO_DATE('17/12/2015', 'DD/MM/YYYY'),TO_DATE('19/12/2015', 'DD/MM/YYYY'),60);  
         
 INSERT INTO Transactions
-        (Transaction_ID, Customer_ID, DVD_ID, Rental_Date , Return_Date, Total)
+        (Transaction_ID, Customer_ID, DVD_ID,Shop_ID, Rental_Date , Return_Date, Total)
         VALUES
-        (Transaction_Generate.nextval,2,3,TO_DATE('19/12/2015', 'DD/MM/YYYY'),TO_DATE('21/12/2015', 'DD/MM/YYYY'),80);  
+        (Transaction_Generate.nextval,2,3,1,TO_DATE('19/12/2015', 'DD/MM/YYYY'),TO_DATE('21/12/2015', 'DD/MM/YYYY'),80);  
         
 INSERT INTO Transactions
-        (Transaction_ID, Customer_ID, DVD_ID, Rental_Date , Return_Date, Total)
+        (Transaction_ID, Customer_ID, DVD_ID,Shop_ID, Rental_Date , Return_Date, Total)
         VALUES
-        (Transaction_Generate.nextval,3,8,TO_DATE('17/12/2015', 'DD/MM/YYYY'),TO_DATE('19/12/2015', 'DD/MM/YYYY'),50);  
+        (Transaction_Generate.nextval,3,8,2,TO_DATE('17/12/2015', 'DD/MM/YYYY'),TO_DATE('19/12/2015', 'DD/MM/YYYY'),50);  
         
 INSERT INTO Transactions
-        (Transaction_ID, Customer_ID, DVD_ID, Rental_Date , Return_Date, Total)
+        (Transaction_ID, Customer_ID, DVD_ID,Shop_ID, Rental_Date , Return_Date, Total)
         VALUES
-        (Transaction_Generate.nextval,4,9,TO_DATE('17/12/2015', 'DD/MM/YYYY'),TO_DATE('19/12/2015', 'DD/MM/YYYY'),55);  
+        (Transaction_Generate.nextval,4,8,3,TO_DATE('17/12/2015', 'DD/MM/YYYY'),TO_DATE('19/12/2015', 'DD/MM/YYYY'),55);  
         
 INSERT INTO Transactions
-        (Transaction_ID, Customer_ID, DVD_ID, Rental_Date , Return_Date, Total)
+        (Transaction_ID, Customer_ID, DVD_ID,Shop_ID, Rental_Date , Return_Date, Total)
         VALUES
-        (Transaction_Generate.nextval,5,1,TO_DATE('17/12/2015', 'DD/MM/YYYY'),TO_DATE('19/12/2015', 'DD/MM/YYYY'),55);  
+        (Transaction_Generate.nextval,5,1,1,TO_DATE('17/12/2015', 'DD/MM/YYYY'),TO_DATE('19/12/2015', 'DD/MM/YYYY'),55);  
         
 INSERT INTO Transactions
-        (Transaction_ID, Customer_ID, DVD_ID, Rental_Date , Return_Date, Total)
+        (Transaction_ID, Customer_ID, DVD_ID,Shop_ID, Rental_Date , Return_Date, Total)
         VALUES
-        (Transaction_Generate.nextval,6,4,TO_DATE('17/12/2015', 'DD/MM/YYYY'),TO_DATE('19/12/2015', 'DD/MM/YYYY'),60);  
+        (Transaction_Generate.nextval,6,4,2,TO_DATE('17/12/2015', 'DD/MM/YYYY'),TO_DATE('19/12/2015', 'DD/MM/YYYY'),60);  
         
 INSERT INTO Transactions
-        (Transaction_ID, Customer_ID, DVD_ID, Rental_Date , Return_Date, Total)
+        (Transaction_ID, Customer_ID, DVD_ID,Shop_ID, Rental_Date , Return_Date, Total)
         VALUES
-        (Transaction_Generate.nextval,7,7,TO_DATE('17/12/2015', 'DD/MM/YYYY'),TO_DATE('19/12/2015', 'DD/MM/YYYY'),30);  
+        (Transaction_Generate.nextval,7,7,3,TO_DATE('17/12/2015', 'DD/MM/YYYY'),TO_DATE('19/12/2015', 'DD/MM/YYYY'),30);  
         
 INSERT INTO Transactions
-        (Transaction_ID, Customer_ID, DVD_ID, Rental_Date , Return_Date, Total)
+        (Transaction_ID, Customer_ID, DVD_ID,Shop_ID, Rental_Date , Return_Date, Total)
         VALUES
-        (Transaction_Generate.nextval,8,5,TO_DATE('17/12/2015', 'DD/MM/YYYY'),TO_DATE('19/12/2015', 'DD/MM/YYYY'),45);  
+        (Transaction_Generate.nextval,8,5,1,TO_DATE('17/12/2015', 'DD/MM/YYYY'),TO_DATE('19/12/2015', 'DD/MM/YYYY'),45);  
         
 INSERT INTO Transactions
-        (Transaction_ID, Customer_ID, DVD_ID, Rental_Date , Return_Date, Total)
+        (Transaction_ID, Customer_ID, DVD_ID,Shop_ID, Rental_Date , Return_Date, Total)
         VALUES
-        (Transaction_Generate.nextval,9,6,TO_DATE('17/12/2015', 'DD/MM/YYYY'),TO_DATE('19/12/2015', 'DD/MM/YYYY'),60);  
+        (Transaction_Generate.nextval,9,6,2,TO_DATE('17/12/2015', 'DD/MM/YYYY'),TO_DATE('19/12/2015', 'DD/MM/YYYY'),60);  
         
 INSERT INTO Transactions
-        (Transaction_ID, Customer_ID, DVD_ID, Rental_Date , Return_Date, Total)
+        (Transaction_ID, Customer_ID, DVD_ID,Shop_ID, Rental_Date , Return_Date, Total)
         VALUES
-        (Transaction_Generate.nextval,10,15,TO_DATE('17/12/2015', 'DD/MM/YYYY'),TO_DATE('19/12/2015', 'DD/MM/YYYY'),100);  
+        (Transaction_Generate.nextval,10,15,3,TO_DATE('17/12/2015', 'DD/MM/YYYY'),TO_DATE('19/12/2015', 'DD/MM/YYYY'),100);  
         
 INSERT INTO Transactions
-        (Transaction_ID, Customer_ID, DVD_ID, Rental_Date , Return_Date, Total)
+        (Transaction_ID, Customer_ID, DVD_ID,Shop_ID, Rental_Date , Return_Date, Total)
         VALUES
-        (Transaction_Generate.nextval,11,13,TO_DATE('17/12/2015', 'DD/MM/YYYY'),TO_DATE('19/12/2015', 'DD/MM/YYYY'),80);  
+        (Transaction_Generate.nextval,11,13,1,TO_DATE('17/12/2015', 'DD/MM/YYYY'),TO_DATE('19/12/2015', 'DD/MM/YYYY'),80);  
         
 INSERT INTO Transactions
-        (Transaction_ID, Customer_ID, DVD_ID, Rental_Date , Return_Date, Total)
+        (Transaction_ID, Customer_ID, DVD_ID,Shop_ID, Rental_Date , Return_Date, Total)
         VALUES
-        (Transaction_Generate.nextval,12,14,TO_DATE('17/12/2015', 'DD/MM/YYYY'),TO_DATE('19/12/2015', 'DD/MM/YYYY'),80);  
+        (Transaction_Generate.nextval,12,14,2,TO_DATE('17/12/2015', 'DD/MM/YYYY'),TO_DATE('19/12/2015', 'DD/MM/YYYY'),80);  
         
 INSERT INTO Transactions
-        (Transaction_ID, Customer_ID, DVD_ID, Rental_Date , Return_Date, Total)
+        (Transaction_ID, Customer_ID, DVD_ID,Shop_ID, Rental_Date , Return_Date, Total)
         VALUES
-        (Transaction_Generate.nextval,13,12,TO_DATE('17/12/2015', 'DD/MM/YYYY'),TO_DATE('19/12/2015', 'DD/MM/YYYY'),85);  
+        (Transaction_Generate.nextval,13,12,3,TO_DATE('17/12/2015', 'DD/MM/YYYY'),TO_DATE('19/12/2015', 'DD/MM/YYYY'),85);  
         
 INSERT INTO Transactions
-        (Transaction_ID, Customer_ID, DVD_ID, Rental_Date , Return_Date, Total)
+        (Transaction_ID, Customer_ID, DVD_ID,Shop_ID, Rental_Date , Return_Date, Total)
         VALUES
-        (Transaction_Generate.nextval,14,11,TO_DATE('17/12/2015', 'DD/MM/YYYY'),TO_DATE('19/12/2015', 'DD/MM/YYYY'),60);  
+        (Transaction_Generate.nextval,14,11,1,TO_DATE('17/12/2015', 'DD/MM/YYYY'),TO_DATE('19/12/2015', 'DD/MM/YYYY'),60);  
         
 INSERT INTO Transactions
-        (Transaction_ID, Customer_ID, DVD_ID, Rental_Date , Return_Date, Total)
+        (Transaction_ID, Customer_ID, DVD_ID,Shop_ID, Rental_Date , Return_Date, Total)
         VALUES
-        (Transaction_Generate.nextval,15,10,TO_DATE('17/12/2015', 'DD/MM/YYYY'),TO_DATE('19/12/2015', 'DD/MM/YYYY'),100);
+        (Transaction_Generate.nextval,15,10,3,TO_DATE('17/12/2015', 'DD/MM/YYYY'),TO_DATE('19/12/2015', 'DD/MM/YYYY'),100);
+        
+/* awe*/ 
         /*15*/
         
 /* Create DSS Tables*/        
@@ -554,7 +571,7 @@ CREATE TABLE TRANSACTION_DIM
     Rental_Title         VARCHAR(30),
     Rental_Date         DATE,
     Return_Date        DATE,
-    Total            MONEY,
+    Total            NUMBER(10),
     CONSTRAINT PK_STAR_Transaction_ID PRIMARY KEY (Transaction_ID)
 );
 
@@ -583,9 +600,9 @@ CREATE TABLE DVD_DIM
     Title            VARCHAR(30),
     Genre_Description    VARCHAR(10),
     Age_Description    VARCHAR(5),
-    Date_Of_Release    YEAR,
+    Date_Of_Release    DATE,
     Length            NUMBER(3),
-    Cost            MONEY,
+    Cost            NUMBER(10),
     CONSTRAINT PK_STAR_DVD_ID PRIMARY KEY (DVD_ID)
 );
 
@@ -609,25 +626,28 @@ CREATE TABLE CUSTOMER_FACT
     Time_Month        NUMBER(2)        NOT NULL,
     Shop_ID        NUMBER(5)        NOT NULL,
     Customer_ID        NUMBER(13)        NOT NULL,
-    Transaction_ID    NUMBER(5)        NOT NULL,
+    
     Total_Sales        NUMBER(3),
-Total_Price        MONEY,
-CONSTRAINT PK_STAR_CUSTOMER_FACT PRIMARY KEY (Time_Year, Time_Month, Shop_ID, Customer_ID, Transaction_ID),
-CONSTRAINT FK_STAR_CUSTOMER_Shop_ID FOREIGN KEY (Shop_ID) REFERENCES SHOP_DIM(Shop_ID),
-CONSTRAINT FK_STAR_CUSTOMER_Customer_ID FOREIGN KEY (Customer_ID) REFERENCES CUSTOMER_DIM(Customer_ID),
-CONSTRAINT FK_STAR_CUSTOMER_Transaction_ID FOREIGN KEY (Transaction_ID) REFERENCES TRANSACTION_DIM(Transaction_ID)
+    Total_Price        Number(10)
+    ,
+CONSTRAINT PK_STAR_CUS_FACT PRIMARY KEY (Time_Year, Time_Month, Shop_ID, Customer_ID));
+,
+CONSTRAINT FK_STAR_CUS_Shop_ID FOREIGN KEY (Shop_ID) REFERENCES SHOP_DIM(Shop_ID),
+CONSTRAINT FK_STAR_CUS_Customer_ID FOREIGN KEY (Customer_ID) REFERENCES CUSTOMER_DIM(Customer_ID),
+CONSTRAINT FK_STAR_CUS_Trans_ID FOREIGN KEY (Transaction_ID) REFERENCES TRANSACTION_DIM(Transaction_ID)
 );
 
 CREATE TABLE TOPDVD_FACT
 (
     DVD_ID            NUMBER(6)        NOT NULL,
     Shop_ID            NUMBER(5)        NOT NULL,
+    Transaction_ID  NUMBER(6) NOT NULL,
     Time_Month            NUMBER(2)        NOT NULL,
     Total_Sales            NUMBER(3),
-    Total_Price_Per_Genre    MONEY,
-CONSTRAINT PK_STAR_TOPDVD_FACT_PRIMARY KEY (DVD_ID, Shop_ID, Time_Month),
-CONSTRAINT FK_STAR_TOPDVD_DVD_ID FOREIGNKEY (DVD_ID) REFERENCES DVD_DIM(DVD_ID),
-CONSTRAINT FK_STAR_TOPDVD_Shop_ID FOREIGN KEY (Shop_ID) REFERENCES SHOP_DIM(Shop_ID)
+    Total_Price_Per_Genre    Number(10),
+    CONSTRAINT PK_STAR_TOPDVD_FACT PRIMARY KEY (DVD_ID, Shop_ID,Transaction_ID, Time_Month),
+CONSTRAINT FK_STAR_TOPDVD_DVD_ID FOREIGN KEY (DVD_ID) REFERENCES DVD_DIM(DVD_ID),
+CONSTRAINT FK_STAR_TOPDVD_Shop_ID FOREIGN KEY (Shop_ID) REFERENCES SHOP_DIM(Shop_ID),CONSTRAINT FK_STAR_CUS_Trans_ID FOREIGN KEY (Transaction_ID) REFERENCES TRANSACTION_DIM(Transaction_ID)
 );
 
   
@@ -640,15 +660,16 @@ DISABLE CONSTRAINT
 
 ALTER TABLE SALES_FACT
 DISABLE CONSTRAINT 
- FK_STAR_SHOP_ID_DIM ;
+ FK_STAR_SALES_Shop_ID ;
 
 ALTER TABLE SALES_FACT
 DISABLE CONSTRAINT 
- FK_CUSTOMER_DIM ;
+ FK_STAR_SALES_Customer_ID ;
 
-ALTER TABLE SALES FACT 
+ALTER TABLE SALES_FACT 
 DISABLE CONSTRAINT 
- FK_TRANSACTION_ID_DIM ;
+ FK_STAR_SALES_Transaction_ID ;
+
 
 ALTER TABLE TRANSACTION_DIM 
 DISABLE CONSTRAINT 
@@ -669,48 +690,52 @@ BEGIN
  
 COMMIT;
 
-SET TRANSACTION READ WRITE NAME ‘UpdateSales_Fact’ ;
+SET TRANSACTION READ WRITE NAME "UpdateSales_Fact" ;
 SAVEPOINT SalesFactSP;
 
 INSERT INTO SALES_FACT
     SELECT DISTINCT
-    EXTRACT(MONTH FROM t.Rental_Date) “Month”,
-    s.Shop_ID AS “Shop”,
-c.Customer_ID AS “Customer”,
-t.Transaction_ID AS “ Transaction”,
+    EXTRACT(MONTH FROM t.Rental_Date)"Month",
+    s.Shop_ID AS "Shop",
+c.Customers_ID AS "Customer",
+t.Transaction_ID AS "Transaction",
 Count(t.Transaction_ID),
-SUM(t.TOTAl)
+SUM(t.TOTAl)"Total"
 
-FROM TRANSACTION t, SHOP s, CUSTOMER c
+FROM Transactions t, SHOP s, Customers c
 
 WHERE t.RENTAL_DATE >(SELECT TRANSACTION_UPDATE_DATE From TRANSACTION_UPDATE WHERE Transaction_Update_number = 1)
- AND t.Customer_ID = c.Customer_ID 
+ AND t.Customer_ID = c.Customers_ID 
     AND t.Shop_ID = s.SHOP_ID
-GROUP BY EXTRACT(MONTH FROM t.Rental_Date), s.Shop_ID,c.CUSTOMER_ID , t.TRANSACTION_ID ;
+GROUP BY EXTRACT(MONTH FROM t.Rental_Date), s.Shop_ID,c.Customers_ID , t.TRANSACTION_ID ;
 
 
-INSERT INTO TRANSACTION_DIM 
-SELECT DISTINCT t.TRANSACTION_ID ,d.TITLE, 
-t.RENTAL_DATE,t.RETURN_DATE,t.TOTAL
-FROM TRANSACTION t ,DVD d
-
-WHERE t.CUSTOMER_ID = c.CUSTOMER_ID;
+INSERT 
+INTO TRANSACTION_DIM 
+SELECT DISTINCT t.TRANSACTION_ID ,d.TITLE,t.RENTAL_DATE,t.RETURN_DATE,t.TOTAL
+FROM Transactions t ,DVD d
+WHERE t.DVD_ID = d.DVD_ID;
 
 
 INSERT INTO SHOP_DIM
-SELECT DISTINCT s.SHOP_ID ,s.SHOP_DESCRIPTION, 
-a.ADDRES_NAME
+SELECT DISTINCT s.SHOP_ID ,s.SHOP_DESCRIPTION, a.Address_Name
 FROM SHOP s ,ADDRESS a
+WHERE s.Address_ID = a.Address_ID;
 
-WHERE s.ADDRES_ID = a.ADDRES_ID;
 
 
 
 INSERT INTO CUSTOMER_DIM
-SELECT DISTINCT c.Custumer_ID, c.CUstomer_F_NAME, c.Customer_L_Name , a.Address_Description,c.Cell_Number , c.Date_Joined
-FROM Customer  c,ADDRESS a
+SELECT DISTINCT c.Customers_ID, c.F_Name, c.L_Name , a.Address_Name,c.Cell_Number , c.Date_Joined
+FROM customers  c,ADDRESS a
+WHERE c.Address_ID  = a.Address_ID;
+ 
+COMMIT;
 
-WHERE c.Addres_ID  = a.ADDRES_ID;
+EXCEPTION WHEN OTHERS THEN ROLLBACK TO SalesFactSP;
+
+END;
+
 
 
 ALTER TABLE SALES_FACT
@@ -720,15 +745,16 @@ ENABLE CONSTRAINT
 
 ALTER TABLE SALES_FACT
 ENABLE CONSTRAINT 
- FK_STAR_SHOP_ID_DIM ;
+ FK_STAR_SALES_Shop_ID ;
 
 ALTER TABLE SALES_FACT
 ENABLE CONSTRAINT 
- FK_CUSTOMER_DIM ;
+ FK_STAR_SALES_Customer_ID ;
 
-ALTER TABLE SALES FACT 
+ALTER TABLE SALES_FACT 
 ENABLE CONSTRAINT 
- FK_TRANSACTION_ID_DIM ;
+ FK_STAR_SALES_Transaction_ID ;
+
 
 ALTER TABLE TRANSACTION_DIM 
 ENABLE CONSTRAINT 
@@ -748,21 +774,25 @@ ENABLE CONSTRAINT
 
 
 
-
 /* SQL to populate CUSTOMER_FACT*/
 
+/* REG CUSTOME_FACT*/
 ALTER TABLE CUSTOMER_FACT
 DISABLE CONSTRAINT
- PK_STAR_CUSTOMER_FACT;
+ PK_STAR_CUS_FACT;
 
 ALTER TABLE CUSTOMER_FACT
 DISABLE CONSTRAINT
- FK_STAR_SHOP_DIM;
+ FK_STAR_CUS_Shop_ID;
 
 ALTER TABLE CUSTOMER_FACT
 DISABLE CONSTRAINT
- FK_STAR_CUSTOMER_DIM;
+ FK_STAR_CUS_Customer_ID;
 
+ALTER TABLE CUSTOMER_FACT
+DISABLE CONSTRAINT
+ FK_STAR_CUS_Trans_ID;
+ 
 ALTER TABLE CUSTOMER_DIM
 DISABLE CONSTRAINT
 PK_STAR_CUSTOMER_ID ;
@@ -778,47 +808,42 @@ PK_STAR_TRANSACTION_ID;
 
 
 BEGIN
- 
 COMMIT;
-
-SET TRANSACTION READ WRITE NAME ‘UpdateCustomer_Fact’ ;
+SET TRANSACTION READ WRITE NAME "UpdateCustomer_Fact" ;
 SAVEPOINT CustomerFactSP;
 
 INSERT INTO CUSTOMER_FACT
     SELECT DISTINCT
-    EXTRACT(YEAR FROM c.DATE_JOINED) “YEAR Joined”,
-EXTRACT(MONTH FROM c.DATE_JOINED) “MONTH Joined”,
-    s.Shop_ID AS “Shop”,
-c.CUSTOMER_ID AS “Customer”,
-t.TRANSACTION_ID As “Transaction”,
-Count(t.Transaction_ID) “TOTAL SALES” ,
-SUM(t.TOTAL) “TOTAL” 
+        EXTRACT(YEAR FROM c.DATE_JOINED) "YEAR Joined",
+        EXTRACT(MONTH FROM c.DATE_JOINED) "MONTH Joined",
+        s.Shop_ID AS "Shop",
+        c.Customers_ID AS "Customer",
+        Count(t.Transaction_ID) "TOTAL SALES" ,
+        SUM(t.TOTAL) "TOTAL"
+
+FROM customers c, SHOP s , transactions t
+
+WHERE c.Date_Joined >(SELECT CUSTOMER_UPDATE_DATE FROM CUSTOMER_UPDATE WHERE CUSTOMER_UPDATE_NUMBER =1)
+    AND c.Customers_ID = t.Customer_ID 
+    AND t.SHOP_ID = s.SHOP_ID
+GROUP BY EXTRACT(YEAR FROM c.DATE_JOINED),EXTRACT(MONTH FROM c.DATE_JOINED),c.Customers_ID,s.SHOP_ID ;
 
 
-FROM CUSTOMER c, SHOP s , TRANSACTION t
 
-WHERE c.Date_Joined >(SELECT CUSTOMER_UPDATE_DATE FROM
- CUSTOMER_UPDATE WHERE CUSTOMER_UPDATE_NUMBER =1)
-AND c.Customer_ID = t.Customer_ID 
-    AND t.Customer_ID = c.CUSTOMER_ID
-    AND c.SHOP_ID = s.SHOP_ID
-
-GROUP BY EXTRACT(Year FROM t.Rental_Date),EXTRACT(Month FROM t.Rental_Date),  s.Shop_ID, c.CUSTOMER_ID , t.TRANSACTION_ID ;
-
+        
 INSERT INTO SHOP_DIM
-SELECT DISTINCT s.SHOP_ID,s.SHOP_DESCRIPTION,a.ADRESS_NAME
+SELECT DISTINCT s.SHOP_ID,s.SHOP_DESCRIPTION,a.Address_Name
 FROM SHOP s ,ADDRESS A
 WHERE a.ADDRESS_ID=s.ADDRESS_ID ;
 
 INSERT INTO CUSTOMER_DIM
-SELECT DISTINCT c.CUSTOMER_ID, c.CUSTOMER_F_NAME, c.CUSTOMER_L_NAME,  a.CUSTOMER_ADDRESS
-FROM CUSTOMER c ,ADDRESS a
+SELECT DISTINCT c.Customers_ID, c.F_Name, c.L_Name,a.Address_Name,c.Cell_Number, c.Date_Joined
+FROM CUSTOMERs c ,ADDRESS a
 WHERE c.ADDRESS_ID=a.ADDRESS_ID ;
 
 INSERT INTO TRANSACTION_DIM
-SELECT DISTINCT c.TRANSACTION_ID, t.RENTAL_TITLE, t.RENTAL_DATE,  t.RETURN_DATE, t.TOTAL
-FROM CUSTOMER c ,TRANSACTION t
-WHERE t.TRANSACTION_ID=c.TRANSACTION_ID ;
+SELECT DISTINCT t.Transaction_ID, t.Title, t.RENTAL_DATE,  t.RETURN_DATE, t.TOTAL
+FROM TRANSACTIONs t;
 
 ALTER TABLE CUSTOMER_FACT
 ENABLE CONSTRAINT
@@ -849,15 +874,15 @@ PK_STAR_TRANSACTION_ID;
 
 ALTER TABLE TOPDVD_FACT   
 DISABLE CONSTRAINT 
-PK_STAR_TOPDVD;
+PK_STAR_TOPDVD_FACT;
 
 ALTER TABLE TOPDVD_FACT
 DISABLE CONSTRAINT
-FK_DVD_DIM;
+FK_STAR_TOPDVD_DVD_ID;
 
 ALTER TABLE TOPDVD_FACT
 DISABLE CONSTRAINT
-FK_SHOP_DIM;
+FK_STAR_TOPDVD_Shop_ID;
 
 ALTER TABLE DVD_DIM 
 DISABLE CONSTRAINT 
@@ -872,20 +897,25 @@ BEGIN
 
 COMMIT;
 
-SET TRANSACTION READ WRITE NAME ‘UpdateTopDVDFact’;
+SET TRANSACTION READ WRITE NAME "UpdateTopDVDFact";
 SAVEPOINT TopDVDFactSP;
 
 INSERT INTO TOPDVD_FACT
 SELECT DISTINCT 
-d.DVD_ID AS “DVD”,
-s.Shop_ID AS “Shop”,
-EXTRACT(MONTH FROM t.Rental_Date) ”Month”
-FROM SHOP s, DVD d
-WHERE d.DATE_OF_RELEASE > (SELECT TOPDVD_UPDATE_DATE FROM TOPDVD_UPDATE WHERE TOPDVD_UPDATE_NUMBER =1),
-s.DVD_ID = d.DVD_ID
-GROUP BY s.Shop_ID,d.DVD_ID, EXTRACT(MONTH FROM t.Rental_Date) ;
+d.DVD_ID AS "DVD",
+s.Shop_ID AS "Shop",
+t.Transaction_ID,
+EXTRACT(MONTH FROM t.Rental_Date) "Month",
+COUNT(t.DVD_ID),
+SUM(t.Total)
+FROM SHOP s, DVD d, transactions t
+WHERE d.DATE_OF_RELEASE > (SELECT TOPDVD_UPDATE_DATE FROM DVD_UPDATE WHERE TOPDVD_UPDATE_NUMBER =1)
+    AND d.DVD_ID = t.DVD_ID
+    AND t.SHOP_ID = t.SHOP_ID
+GROUP BY s.Shop_ID,d.DVD_ID,t.DVD_ID,EXTRACT(MONTH FROM t.Rental_Date) ;
 
-
+Transactions
+        (Transaction_ID, Customer_ID, DVD_ID,Shop_ID, Rental_Date , Return_Date, Total)
 INSERT INTO SHOP_DIM
 SELECT DISTINCT s.SHOP_ID ,s.SHOP_DESCRIPTION, 
 a.ADDRES_NAME
@@ -894,11 +924,11 @@ WHERE s.ADDRES_ID = a.ADDRES_ID;
 
 
 INSERT INTO DVD_DIM
-SELECT DISTINCT d.DVD_ID, d.Title, g.Genre_Description, a.Age_Description, d.Date_Of_Release, d.Length, d.Cost
+SELECT DISTINCT d.DVD_ID, d.Title, g.Genre_Description, a.Age_Restriction_Description, d.Date_Of_Release, d.Length_OF_DVD, d.DVD_Cost
     FROM DVD d, GENRE g, AGE_RESTRICTION a
 
     WHERE d.GENRE_ID = g.GENRE_ID 
-        AND d.AGE_RESID = a.AGE_RESID;
+        AND d.AGE_RES_ID = a.AGE_RES_ID;
 
 COMMIT;
  
@@ -945,16 +975,16 @@ CREATE TABLE TRANSACTION_UPDATE
 (
 Transaction_Update_number  NUMBER(1) NOT NULL,
 TRANSACTION_UPDATE_DATE  DATE,
-CONSTRAINT PK_TRANSACTION_UPDATE PRIMARY 
-KEY(Transaction_Update_number )
-):
+CONSTRAINT PK_TRANSACTION_UPDATE PRIMARY KEY(Transaction_Update_number)
+);
 
 
 CREATE TABLE CUSTOMER_UPDATE
 ( 
-CUSTOMER_UPDATE_NUMBER             NUMBER(1) NOT NULL, CUSTOMER_UPDATE_DATE             DATE, 
-CONSTRAINT PK_CUSTOMER_UPDATE PRIMARY KEY(CUSTOMER_UPDATE_NUMBER) ;
-)
+CUSTOMER_UPDATE_NUMBER             NUMBER(1) NOT NULL, 
+CUSTOMER_UPDATE_DATE             DATE, 
+CONSTRAINT PK_CUSTOMER_UPDATE PRIMARY KEY(CUSTOMER_UPDATE_NUMBER) 
+);
 
 
 CREATE TABLE DVD_UPDATE
@@ -962,25 +992,37 @@ CREATE TABLE DVD_UPDATE
 TOPDVD_UPDATE_NUMBER             NUMBER(1) NOT NULL,
  TOPDVD_UPDATE_DATE                 DATE, 
 CONSTRAINT PK_TOPDVD_UPDATE PRIMARY KEY(TOPDVD_UPDATE_NUMBER)
-)
+);
 
 
 INSERT ALL
 INTO TRANSACTION_UPDATE(Transaction_Update_number ,TRANSACTION_UPDATE_DATE )
-VALUES (1,TO_DATE(‘2015-Jan-01’ , ‘ YYYY-MM-DD’);
+VALUES (1,TO_DATE('01/01/2015', 'DD/MM/YYYY'))
 
-INTO CUSTOMER_UPDATE(CUSTOMER_UPDATE_NUMBER ,TOPDVD_UPDATE_DATE )
-VALUES (1,TO_DATE(‘2015-Jan-01’ , ‘ YYYY-MM-DD’);
+INTO CUSTOMER_UPDATE(CUSTOMER_UPDATE_NUMBER ,CUSTOMER_UPDATE_DATE )
+VALUES (1,TO_DATE('01/01/2015', 'DD/MM/YYYY'))
 
 INTO DVD_UPDATE(TOPDVD_UPDATE_NUMBER ,TOPDVD_UPDATE_DATE )
-VALUES (1,TO_DATE(‘2015-Jan-01’ , ‘ YYYY-MM-DD’);
+VALUES (1,TO_DATE('01/01/2015', 'DD/MM/YYYY'))
+
+SELECT 1 FROM DUAL;
+
+
+UPDATE TRANSACTION_UPDATE
+SET Transaction_Update_number=1,TRANSACTION_UPDATE_DATE=SYSDATE;
+
+UPDATE CUSTOMER_UPDATE
+SET CUSTOMER_UPDATE_NUMBER=1,CUSTOMER_UPDATE_DATE=SYSDATE;
+
+UPDATE DVD_UPDATE
+SET TOPDVD_UPDATE_NUMBER=1,TOPDVD_UPDATE_DATE=SYSDATE;
 
 /* Creation of Indexes*/
 CREATE INDEX SHOP_DESCRIP_IDX
 ON SHOP(Shop_DESCRIPTION);
 
-CREATE INDEXE TRANS_RETURN_IDX
-ON TRANSACTION(RETURN_DATE);
+CREATE INDEX TRANS_RETURN_IDX
+ON TRANSACTIONs(RETURN_DATE);
 
 
 /* SQL QUERIES - INFORMATION FOR DECISION MAKING*/
@@ -988,43 +1030,23 @@ ON TRANSACTION(RETURN_DATE);
 /*This statement shows which Shop sold the most DVDs*/
 
 SELECT c.CUSTOMER_F_NAME, c.CUSTOMER_L_NAME, s.SHOP_DESCRIPTION, sf.SALES_QUANTITY , sf.SALES_TOTAL
-FROM CUSTOMER_DIM c , SHOP_DIM s , TRANSACTION_DIM , SALES_FACT sf
+FROM CUSTOMER_DIM c , SHOP_DIM s , TRANSACTION_DIM t, SALES_FACT sf
 WHERE sf.SHOP_ID= s.SHOP_ID 
 AND sf.CUSTOMER_ID = c.CUSTOMER_ID
-AND sf.TRANACTION_ID = t.TRANSACTION_ID
+AND sf.TRANSACTION_ID = t.TRANSACTION_ID
 
 /*This statement shows the name and surname of the client that bought the most DVD. It also shows the Shop where the DVD was sold. The quantity of DVD that is sold as well as the Total price:
 */
-SELECT cf.Time_YEAR,cf.TIME_MONTH, s.SHOP_DESCRIPTION,c.CUSTOMER_DESCRIPTION, t.RENTAL_TITLE, cf.TOTAL_SALES , cf.TOTAL_PRICE
-FROM CUSTOMER_FACT cf , CUSTOMER_DIM c , SHOP_DIM  s , TRANSACTION_DIM t 
+SELECT cf.Time_YEAR,cf.TIME_MONTH, s.SHOP_DESCRIPTION,c.CUSTOMER_F_NAME, cf.TOTAL_SALES , cf.TOTAL_PRICE
+FROM CUSTOMER_FACT cf , CUSTOMER_DIM c , SHOP_DIM  s 
 WHERE cf.SHOP_ID = s.SHOP_ID
-    AND cf.CUSTOMER_ID = c.CUSTOMER_ID
-    AND cf.TRANSACTION_ID = t.TRANSACION_ID
+    AND cf.CUSTOMER_ID = c.CUSTOMER_ID ;
 
 /*Shows the best DVDS sold per DVD, GENRE , SHOP.*/
 
-SELECT d.Title s.SHOP_DESCRIPTION tf.Time_MONTH, tf.TOTAL_SALES, tf.TOTAL_PRICE
+SELECT d.Title, s.SHOP_DESCRIPTION, tf.Time_MONTH, tf.TOTAL_SALES, tf.TOTAL_PRICE
 FROM TOPDVD_FACT tf , SHOP_DIM s , DVD_DIM  d
 WHERE tf.DVD_ID = d.DVD_ID
     AND tf.SHOP_ID = s.SHOP_ID;
 
-                  
-                    
-                    
-                    
-                    
-          
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
+           
